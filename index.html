@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapa Auto-organizado</title>
+
+    <!-- 
+        ? Desarrollado por: Julio Alfredo Vázquez Díaz
+        ? Grupo: 9°B de ITI
+    -->
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="assets/css/index.css">
+
+    <!-- FONTS -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- ENCABEZADO -->
+    <header>
+        <div class="100">
+            <h1>Mapa auto-organizado</h1>
+        </div>
+
+        <p><strong>Materia:</strong> Sistemas Inteligentes</p>
+        <p><strong>Docente:</strong> Mtro. Samuel Mendez Vega</p>
+    </header>
+
+    <!-- MAPA -->
+    <main>
+        <canvas id="map"></canvas>
+    </main>
+
+    <!-- FORMULARIO -->
+    <section>
+        <form action="">
+            <fieldset>
+                <div class="question">
+                    <label for="emoji">Emoji o Nombre:</label>
+                    <input type="text" name="emoji" id="emoji">
+                </div>
+
+                <div class="question">
+                    <label for="travel">1. Movilidad: </label>
+                    <select name="travel" id="travel">
+                        <option value="">-</option>
+                        <option value="0.2">Aérea</option>
+                        <option value="0.4">Terrestre</option>
+                        <option value="0.6">Acuática</option>
+                        <option value="0.8">Mixta</option>
+                    </select>
+                </div>
+
+                <div class="question">
+                    <label for="ecosistem">2. Ecosistema:</label>
+                    <select name="ecosistem" id="ecosistem">
+                        <option value="">-</option>
+                        <option value="0.12">Selva</option>
+                        <option value="0.25">Desierto</option>
+                        <option value="0.37">Océano</option>
+                        <option value="0.50">Río</option>
+                        <option value="0.62">Bosque</option>
+                        <option value="0.75">Tundra</option>
+
+                    </select>
+                </div>
+
+                <div class="question">
+                    <label for="habitats">3. Hábitat:</label>
+                    <select name="habitats" id="habitats">
+                        <option value="">-</option>
+                        <option value="0.16">Árbol</option>
+                        <option value="0.32">Cueva</option>
+                        <option value="0.48">Agua</option>
+                        <option value="0.64">Madriguera</option>
+                        <option value="0.80">Suelo</option>
+                    </select>
+                </div>
+
+                <div class="question">
+                    <label for="size">4. Tamaño:</label>
+                    <select name="size" id="size" required>
+                        <option value="">-</option>
+                        <option value="0.16">Muy pequeño</option>
+                        <option value="0.32">Pequeño</option>
+                        <option value="0.48">Mediano</option>
+                        <option value="0.64">Grande</option>
+                        <option value="0.80">Muy grande</option>
+                    </select>
+                </div>
+
+                <div class="question">
+                    <label for="diet">5. Alimentación:</label>
+                    <select name="diet" id="diet" required>
+                        <option value="">-</option>
+                        <option value="0.11">Herbívora</option>
+                        <option value="0.22">Carnívora</option>
+                        <option value="0.33">Omnívora</option>
+                        <option value="0.44">Insectívora</option>
+                        <option value="0.55">Piscívora</option>
+                        <option value="0.66">Frugívora</option>
+                        <option value="0.77">Nectarívora</option>
+                        <option value="0.88">Filtradora</option>
+                    </select>
+                </div>
+
+                <div class="question">
+                    <label for="activity">6. Actividad:</label>
+                    <select name="activity" id="activity" required>
+                        <option value="">-</option>
+                        <option value="0.2">Diurna</option>
+                        <option value="0.4">Nocturna</option>
+                        <option value="0.6">Crepuscular</option>
+                        <option value="0.8">Activa de día y de noche</option>
+                    </select>
+                </div>
+
+                <div class="question">
+                    <label for="social-structure">7. Organización social:</label>
+                    <select name="social-structure" id="social-structure" required>
+                        <option value="">-</option>
+                        <option value="0.12">Solitario</option>
+                        <option value="0.25">Pareja</option>
+                        <option value="0.37">Grupo familiar</option>
+                        <option value="0.50">Manada</option>
+                        <option value="0.62">Bandada</option>
+                        <option value="0.75">Cardumen</option>
+                        <option value="0.87">Colonia</option>
+                    </select>
+                </div>
+
+                <div class="question">
+                    <label for="reproduction">8. Reproducción:</label>
+                    <select name="reproduction" id="reproduction" required>
+                        <option value="">-</option>
+                        <option value="0.25">Ovípara</option>
+                        <option value="0.5">Vivípara</option>
+                        <option value="0.75">Ovovivípara</option>
+                    </select>
+                </div>
+
+                <div class="question">
+                    <label for="climate">9. Clima predominante:</label>
+                    <select name="climate" id="climate" required>
+                        <option value="">-</option>
+                        <option value="0.08">Polar</option>
+                        <option value="0.16">Subpolar</option>
+                        <option value="0.24">Frío</option>
+                        <option value="0.32">Templado</option>
+                        <option value="0.40">Mediterráneo</option>
+                        <option value="0.48">Subtropical</option>
+                        <option value="0.56">Tropical</option>
+                        <option value="0.64">Árido</option>
+                        <option value="0.72">Semiárido</option>
+                        <option value="0.80">Húmedo</option>
+                        <option value="0.88">Montañoso o alpino</option>
+                        <option value="0.96">Variable o amplia distribución</option>
+                    </select>
+                </div>
+
+                <div class="question">
+                    <label for="lifespan">10. Longevidad:</label>
+                    <select name="lifespan" id="lifespan" required>
+                        <option value="">-</option>
+                        <option value="0.16">Muy corta (menos de 5 años)</option>
+                        <option value="0.32">Corta (5 a 15 años)</option>
+                        <option value="0.48">Media (16 a 30 años)</option>
+                        <option value="0.64">Larga (31 a 60 años)</option>
+                        <option value="0.80">Muy larga (más de 60 años)</option>
+                    </select>
+                </div>
+
+                <div class="question">
+                    <label for="body-covering">11. Cubierta corporal:</label>
+                    <select name="body-covering" id="body-covering" required>
+                        <option value="">-</option>
+                        <option value="0.12">Pelo</option>
+                        <option value="0.25">Plumas</option>
+                        <option value="0.37">Escamas</option>
+                        <option value="0.50">Piel desnuda</option>
+                        <option value="0.62">Caparazón</option>
+                        <option value="0.75">Exoesqueleto</option>
+                    </select>
+                </div>
+
+                <div class="question">
+                    <label for="animal-group">12. Grupo zoológico:</label>
+                    <select name="animal-group" id="animal-group" required>
+                        <option value="">-</option>
+                        <option value="0.12">Mamífero</option>
+                        <option value="0.25">Ave</option>
+                        <option value="0.37">Reptil</option>
+                        <option value="0.50">Anfibio</option>
+                        <option value="0.62">Pez</option>
+                        <option value="0.75">Invertebrado</option>
+                    </select>
+                </div>
+
+                <div class="question">
+                    <label for="thermoregulation">13. Regulación térmica:</label>
+                    <select name="thermoregulation" id="thermoregulation" required>
+                        <option value="">-</option>
+                        <option value="0.25">Endoterma</option>
+                        <option value="0.50">Ectoterma</option>
+                        <option value="0.75">Heteroterma</option>
+                    </select>
+                </div>
+
+                <div class="question">
+                    <label for="parental-care">14. Cuidado parental:</label>
+                    <select name="parental-care" id="parental-care" required>
+                        <option value="">-</option>
+                        <option value="0.20">Sin cuidado parental</option>
+                        <option value="0.40">Cuidado breve</option>
+                        <option value="0.60">Cuidado prolongado</option>
+                        <option value="0.80">Cuidado cooperativo</option>
+                    </select>
+                </div>
+
+                <div class="question">
+                    <label for="offspring-count">15. Número de crías por puesta o camada:</label>
+                    <select name="offspring-count" id="offspring-count" required>
+                        <option value="">-</option>
+                        <option value="0.16">Una</option>
+                        <option value="0.32">De 2 a 5</option>
+                        <option value="0.48">De 6 a 10</option>
+                        <option value="0.64">De 11 a 20</option>
+                        <option value="0.80">Más de 20</option>
+                    </select>
+                </div>
+
+                <div class="question">
+                    <label for="communication">16. Comunicación predominante:</label>
+                    <select name="communication" id="communication" required>
+                        <option value="">-</option>
+                        <option value="0.16">Acústica</option>
+                        <option value="0.32">Visual</option>
+                        <option value="0.48">Química u olfativa</option>
+                        <option value="0.64">Táctil</option>
+                        <option value="0.80">Combinada</option>
+                    </select>
+                </div>
+
+                <div class="question">
+                    <label for="defense">17. Defensa principal:</label>
+                    <select name="defense" id="defense" required>
+                        <option value="">-</option>
+                        <option value="0.12">Camuflaje</option>
+                        <option value="0.25">Escape o huida</option>
+                        <option value="0.37">Armadura o caparazón</option>
+                        <option value="0.50">Veneno o toxinas</option>
+                        <option value="0.62">Defensa en grupo</option>
+                        <option value="0.75">Amenaza o intimidación</option>
+                    </select>
+                </div>
+
+                <div class="question">
+                    <label for="migration">18. Patrón migratorio:</label>
+                    <select name="migration" id="migration" required>
+                        <option value="">-</option>
+                        <option value="0.20">Residente</option>
+                        <option value="0.40">Migración estacional</option>
+                        <option value="0.60">Nómada</option>
+                        <option value="0.80">Migración parcial</option>
+                    </select>
+                </div>
+
+                <div class="question">
+                    <label for="distribution">19. Distribución geográfica:</label>
+                    <select name="distribution" id="distribution" required>
+                        <option value="">-</option>
+                        <option value="0.20">Local</option>
+                        <option value="0.40">Regional</option>
+                        <option value="0.60">Continental</option>
+                        <option value="0.80">Cosmopolita</option>
+                    </select>
+                </div>
+
+                <div class="question">
+                    <label for="conservation">20. Estado de conservación:</label>
+                    <select name="conservation" id="conservation" required>
+                        <option value="">-</option>
+                        <option value="0.16">Preocupación menor</option>
+                        <option value="0.32">Casi amenazada</option>
+                        <option value="0.48">Vulnerable</option>
+                        <option value="0.64">En peligro</option>
+                        <option value="0.80">En peligro crítico</option>
+                    </select>
+                </div>
+
+                <div class="">
+                    <input type="reset" value="Nuevo +">
+                </div>
+            </fieldset>
+        </form>
+    </section>
+
+    <!-- SCRIPTS -->
+    <script src="assets/js/index.js"></script>
+    <script src="assets/js/vectorialSpace.js"></script>
+</body>
+</html>
