@@ -127,234 +127,207 @@ var Caract = [
 	[0.6,0.37,0.48,0.48,0.22,0.4,0.12,0.25,0.96,0.16,0.50,0.75,0.50,0.40,0.80,0.32,0.12,0.20,0.80,0.16] // Pulpo
 ];
 
-// + PARÁMETROS DEL SOM +
-var map = document.getElementById('map'); 	// Referencia al canvas
-var ctx = map.getContext('2d');     		// Contexto 2D para dibujar
+// + ENTRENAMIENTO SOM 3D +
+// Cada neurona de la grilla XYZ conserva un peso por característica del animal.
+var SOM3D_SIZE = 20;
+var SOM3D_FEATURES = etiquetas.length;
+var SOM3D_ANIMALS = Animales.length;
+var SOM3D_NODE_COUNT = SOM3D_SIZE ** 3;
+var SOM3D_WEIGHTS = Array.from({ length: SOM3D_NODE_COUNT * SOM3D_FEATURES }, getRandom);
+// PosMn guarda por separado las coordenadas X, Y y Z de cada animal.
+var PosMn = [Array(SOM3D_ANIMALS), Array(SOM3D_ANIMALS), Array(SOM3D_ANIMALS)];
 
-var medida= map.width;                    	// Tamaño del canvas en píxeles
-var margen = medida * 0.05;           		// Margen del 5% del canvas
-var largo = medida - 2 * margen;        	// Área útil del canvas
+// Convierte XYZ en un índice lineal para almacenar los pesos en un arreglo.
+function som3DIndex(x, y, z) {
+	return (x * SOM3D_SIZE + y) * SOM3D_SIZE + z;
+}
 
-var R = 10;                           		// Número de iteraciones de entrenamiento (épocas)
-var FC = 20;                         		// Tamaño de la grilla del mapa (20x20 = 400 neuronas)
-var N = Caract[0].length;            		// Número de características por animal (20)
-var n = Caract.length;             			// Número de animales en el dataset (45)
-var k = FC*FC*N;                    		// Número total de pesos (20*20*20 = 8000)
+// PASO 1: encuentra la unidad de mejor coincidencia (BMU) para un vector.
+function som3DFindWinner(vector) {
+	var bestDistance = Infinity;
+	var winner = { x: 0, y: 0, z: 0 };
 
-//* INICIALIZACIÓN DE PESOS
-// Matriz de pesos W: cada neurona tiene N pesos (uno por característica)
-// Los pesos se inicializan aleatoriamente entre 0 y 1
-var W = Array.from({length: k}, () => Math.random());
+	// Recorre las coordenadas X, Y y Z de toda la grilla de neuronas.
+	for (var x = 0; x < SOM3D_SIZE; x++) {
+		for (var y = 0; y < SOM3D_SIZE; y++) {
+			for (var z = 0; z < SOM3D_SIZE; z++) {
+				var offset = som3DIndex(x, y, z) * SOM3D_FEATURES;
+				var distance = 0;
 
-//* PARÁMETROS DE ENTRENAMIENTO
-var DS = 1;	// Desviación estándar inicial para la función de vecindad
-
-// + ALGORITMO DE ENTRENAMIENTO SOM +
-console.log("Iniciando entrenamiento del SOM...");
-
-//* BUCLE PRINCIPAL DE ENTRENAMIENTO
-for (let r = 0; r < R; r++) {//1 - Para cada época de entrenamiento
-	console.log("Época " + (r+1) + "/" + R);
-	
-	// Matriz para almacenar las posiciones de las neuronas ganadoras
-	// PosMn[0] = coordenadas X, PosMn[1] = coordenadas Y
-	PosMn=[Array(n+1).fill(0),Array(n+1).fill(0)];	
-	
-	// Para cada animal en el dataset de entrenamiento
-	for (let A = 0; A < n; A++) {//2
-		console.log("  Procesando animal: " + Animales[A]);
-		
-		// PASO 1: ENCONTRAR LA NEURONA GANADORA (BMU - Best Matching Unit)
-		let mn = Infinity; // Distancia mínima encontrada
-		
-		// Recorrer toda la grilla de neuronas
-		for (let x = 0; x < FC; x++) {//3 - Coordenada X de la neurona
-			for (let u = 0; u < FC; u++) {//4 - Coordenada Y de la neurona
-				// Calcular distancia euclidiana entre el animal y la neurona
-				D=0;
-				for (let l = 0; l < N; l++) {//5 - Para cada característica
-					// Sumar las diferencias absolutas entre características del animal y pesos de la neurona
-					D+=Math.abs( Caract[A][l] - W[l + u * N + x * FC * N]);
+				// Suma las diferencias absolutas entre las 20 características y los pesos.
+				for (var feature = 0; feature < SOM3D_FEATURES; feature++) {
+					distance += Math.abs(vector[feature] - SOM3D_WEIGHTS[offset + feature]);
 				}
-				
-				// Si esta neurona está más cerca, es la nueva ganadora
-				if(D < mn & D!=0 & D!=1){
-					mn=D;
-					PosMn[0][A]=x; // Guardar coordenada X de la neurona ganadora
-					PosMn[1][A]=u; // Guardar coordenada Y de la neurona ganadora
+
+				if (distance < bestDistance) {
+					bestDistance = distance;
+					winner = { x: x, y: y, z: z };
 				}
 			}
 		}
-		
-		// PASO 2: ACTUALIZAR PESOS DE LA NEURONA GANADORA Y SUS VECINAS
-		var AW=Array(k).fill(0);      // Array para almacenar los cambios de pesos
-		AWprueba = Array(k).fill(0);   // Array auxiliar
-		
-		// Recorrer toda la grilla nuevamente para actualizar pesos
-		for (let h = 0; h < FC; h++) {//3 - Coordenada X de la neurona actual
-			for (let a = 0; a < FC; a++) {//4 - Coordenada Y de la neurona actual
-				// Calcular distancia entre neurona ganadora y neurona actual
-				let d=Math.sqrt(Math.pow(PosMn[0][A]-h,2) + Math.pow(PosMn[1][A]-a,2));
-				
-				// Para cada característica de esta neurona
-				for (let b = 0; b < N; b++) {//5
-					// Aplicar función de vecindad gaussiana y calcular cambio de peso
-					// Función de vecindad: e^(-d²/2σ²) donde σ = DS
-					// Cambio de peso = función_vecindad * (característica_animal - peso_actual)
-					AW[ b + a * N + h * FC * N ] = ( Math.pow(Math.E,- Math.pow(d,2) / (2 * Math.pow(DS,2))))  * (Caract[A][b] - W[b + a * N + h * FC * N]);
+	}
+
+	return winner;
+}
+
+// PASO 2: entrena el mapa durante varias épocas con tasa y radio decrecientes.
+var SOM3D_EPOCHS = 8;
+for (var epoch = 0; epoch < SOM3D_EPOCHS; epoch++) {
+	var progress = epoch / (SOM3D_EPOCHS - 1);
+	var learningRate = 0.35 * Math.exp(-2.2 * progress);
+	var radius = Math.max(1, SOM3D_SIZE * 0.45 * Math.exp(-3 * progress));
+	var radiusSquared = radius * radius;
+	var animalOrder = Array.from({ length: SOM3D_ANIMALS }, function (_, index) { return index; });
+
+	// Mezcla el orden de los animales en cada época para evitar un orden fijo de aprendizaje.
+	for (var shuffleIndex = animalOrder.length - 1; shuffleIndex > 0; shuffleIndex--) {
+		var swapIndex = Math.floor(Math.random() * (shuffleIndex + 1));
+		[animalOrder[shuffleIndex], animalOrder[swapIndex]] = [animalOrder[swapIndex], animalOrder[shuffleIndex]];
+	}
+
+	// Presenta cada animal, localiza su BMU y actualiza las neuronas cercanas en XYZ.
+	for (var animalIndex of animalOrder) {
+		var vector = Caract[animalIndex];
+		var winner = som3DFindWinner(vector);
+		var reach = Math.ceil(radius * 2.5);
+
+		// Limita el recorrido al vecindario de la BMU en los tres ejes.
+		for (var nodeX = Math.max(0, winner.x - reach); nodeX <= Math.min(SOM3D_SIZE - 1, winner.x + reach); nodeX++) {
+			for (var nodeY = Math.max(0, winner.y - reach); nodeY <= Math.min(SOM3D_SIZE - 1, winner.y + reach); nodeY++) {
+				for (var nodeZ = Math.max(0, winner.z - reach); nodeZ <= Math.min(SOM3D_SIZE - 1, winner.z + reach); nodeZ++) {
+					var dx = nodeX - winner.x;
+					var dy = nodeY - winner.y;
+					var dz = nodeZ - winner.z;
+					var distanceSquared = dx * dx + dy * dy + dz * dz;
+					var influence = Math.exp(-distanceSquared / (2 * radiusSquared));
+					var weightOffset = som3DIndex(nodeX, nodeY, nodeZ) * SOM3D_FEATURES;
+
+					// La influencia gaussiana acerca los pesos vecinos al vector del animal.
+					for (var featureIndex = 0; featureIndex < SOM3D_FEATURES; featureIndex++) {
+						var weightIndex = weightOffset + featureIndex;
+						SOM3D_WEIGHTS[weightIndex] += learningRate * influence * (vector[featureIndex] - SOM3D_WEIGHTS[weightIndex]);
+					}
 				}
 			}
 		}
-		
-		// Aplicar los cambios de peso calculados
-		for (let q = 0; q < k; q++) {
-			W[q]=(W[q] + AW[q]);
+	}
+}
+
+// PASO 3: calcula la posición final XYZ de cada animal tras el entrenamiento.
+for (var animal = 0; animal < SOM3D_ANIMALS; animal++) {
+	var animalWinner = som3DFindWinner(Caract[animal]);
+	PosMn[0][animal] = animalWinner.x;
+	PosMn[1][animal] = animalWinner.y;
+	PosMn[2][animal] = animalWinner.z;
+}
+
+// PASO 4: proyecta las posiciones XYZ al canvas 2D con una vista isométrica.
+var mapCanvas = document.getElementById('map');
+var mapContext = mapCanvas.getContext('2d');
+var depthScale = 0.18;
+var axisXScale = Math.SQRT1_2;
+var axisYScale = Math.SQRT1_2 / 2;
+var mapHalfRange = (SOM3D_SIZE - 1) / 2;
+var mapPixelRatio = Math.min(window.devicePixelRatio || 1, 2);
+
+// Centra el cubo y comprime ligeramente Z para dar profundidad sin cambiar el tamaño de los emojis.
+function projectSOM3D(x, y, z, scale, centerX, centerY) {
+	var centeredX = x - mapHalfRange;
+	var centeredY = y - mapHalfRange;
+	var centeredZ = z - mapHalfRange;
+	return {
+		x: centerX + (centeredX - centeredY) * axisXScale * scale,
+		y: centerY + ((centeredX + centeredY) * axisYScale - centeredZ * depthScale) * scale
+	};
+}
+
+// Dibuja un segmento proyectado; se usa para el marco y los ejes de referencia.
+function drawSOM3DLine(start, end, color, width) {
+	mapContext.beginPath();
+	mapContext.moveTo(start.x, start.y);
+	mapContext.lineTo(end.x, end.y);
+	mapContext.strokeStyle = color;
+	mapContext.lineWidth = width;
+	mapContext.stroke();
+}
+
+// Ajusta la resolución al canvas, dibuja el cubo y coloca los animales en sus coordenadas.
+function drawSOM3D() {
+	var bounds = mapCanvas.getBoundingClientRect();
+	var width = Math.max(1, bounds.width);
+	var height = Math.max(1, bounds.height);
+	mapPixelRatio = Math.min(window.devicePixelRatio || 1, 2);
+	mapCanvas.width = Math.round(width * mapPixelRatio);
+	mapCanvas.height = Math.round(height * mapPixelRatio);
+	mapContext.setTransform(mapPixelRatio, 0, 0, mapPixelRatio, 0, 0);
+	mapContext.clearRect(0, 0, width, height);
+
+	var margin = Math.min(width, height) * 0.09;
+	var horizontalExtent = mapHalfRange * 2 * axisXScale;
+	var verticalExtent = mapHalfRange * (2 * axisYScale + depthScale);
+	var scale = Math.min((width - 2 * margin) / (2 * horizontalExtent), (height - 2 * margin) / (2 * verticalExtent));
+	var centerX = width / 2;
+	var centerY = height / 2;
+	var low = 0;
+	var high = SOM3D_SIZE - 1;
+
+	// Limpia el canvas y establece el fondo antes de dibujar el mapa.
+	mapContext.fillStyle = '#102a32';
+	mapContext.fillRect(0, 0, width, height);
+	mapContext.lineWidth = 1;
+
+	for (var a = low; a <= high; a += high) {
+		for (var b = low; b <= high; b += high) {
+			drawSOM3DLine(projectSOM3D(low, a, b, scale, centerX, centerY), projectSOM3D(high, a, b, scale, centerX, centerY), 'rgba(149, 190, 182, 0.38)', 1);
+			drawSOM3DLine(projectSOM3D(a, low, b, scale, centerX, centerY), projectSOM3D(a, high, b, scale, centerX, centerY), 'rgba(149, 190, 182, 0.38)', 1);
+			drawSOM3DLine(projectSOM3D(a, b, low, scale, centerX, centerY), projectSOM3D(a, b, high, scale, centerX, centerY), 'rgba(149, 190, 182, 0.38)', 1);
 		}
 	}
-	
-	// ACTUALIZACIÓN DE BARRA DE PROGRESO
-	progreso = Math.round(r/R*100) + 10;
-	if(progreso>=100){
-		/* document.getElementById('train_label').innerHTML  = "Mapa Listo! <i class='fa fa-fw fa-thumbs-o-up'></i>"; */
-		progreso = 100;
-		console.log("Entrenamiento completado!");
+
+	// Resalta X, Y y Z para que se distingan los tres ejes del espacio.
+	var origin = projectSOM3D(mapHalfRange, mapHalfRange, mapHalfRange, scale, centerX, centerY);
+	var xAxis = projectSOM3D(high, mapHalfRange, mapHalfRange, scale, centerX, centerY);
+	var yAxis = projectSOM3D(mapHalfRange, high, mapHalfRange, scale, centerX, centerY);
+	var zAxis = projectSOM3D(mapHalfRange, mapHalfRange, high, scale, centerX, centerY);
+	drawSOM3DLine(origin, xAxis, '#f28b65', 2);
+	drawSOM3DLine(origin, yAxis, '#72c9a4', 2);
+	drawSOM3DLine(origin, zAxis, '#76b9ed', 2);
+
+	mapContext.font = 'bold 15px Raleway, sans-serif';
+	mapContext.textAlign = 'center';
+	mapContext.textBaseline = 'middle';
+	mapContext.fillStyle = '#f28b65';
+	mapContext.fillText('X', xAxis.x + 10, xAxis.y);
+	mapContext.fillStyle = '#72c9a4';
+	mapContext.fillText('Y', yAxis.x - 9, yAxis.y);
+	mapContext.fillStyle = '#76b9ed';
+	mapContext.fillText('Z', zAxis.x, zAxis.y - 10);
+
+	// Ordena los emojis por profundidad para dibujar primero los más alejados.
+	var drawOrder = Array.from({ length: SOM3D_ANIMALS }, function (_, index) { return index; });
+	drawOrder.sort(function (first, second) {
+		return PosMn[0][first] + PosMn[1][first] + PosMn[2][first] - PosMn[0][second] - PosMn[1][second] - PosMn[2][second];
+	});
+
+	mapContext.font = `${Math.max(14, Math.min(22, Math.round(scale * 0.9)))}px "Segoe UI Emoji", "Apple Color Emoji", sans-serif`;
+	mapContext.textAlign = 'center';
+	mapContext.textBaseline = 'middle';
+	mapContext.fillStyle = '#ffffff';
+	for (var index of drawOrder) {
+		var point = projectSOM3D(PosMn[0][index], PosMn[1][index], PosMn[2][index], scale, centerX, centerY);
+		mapContext.fillText(Animales[index], point.x, point.y);
 	}
-	else{
-		/* document.getElementById('train_label').innerHTML  = "Cargando Mapa <i class='fa fa-refresh fa-spin'></i> " + progreso + '%';							 */
-	}
-	/* document.getElementById('train_div').style.width  = progreso + '%'; */
 }
 
-// + VISUALIZACIÓN DEL MAPA +
-console.log("Dibujando mapa...");
-
-// DIBUJAR GRID DEL MAPA
-ctx.lineWidth = 0.5;
-ctx.beginPath();			
-ctx.moveTo(margen, margen);
-ctx.lineTo(margen, margen + largo);		// Línea vertical izquierda
-ctx.moveTo(margen, margen);
-ctx.lineTo(margen + largo, margen);		// Línea horizontal superior
-ctx.stroke();
-
-// Dibujar líneas de la cuadrícula
-var cellSize = largo / FC;
-for (let m = 1; m <= FC; m++) {
-	paso = (cellSize * m) + margen;
-	ctx.lineWidth = 0.5;
-	ctx.beginPath();			
-	ctx.moveTo(paso, margen);
-	ctx.lineTo(paso, margen + largo);		// Líneas verticales
-	ctx.moveTo(margen,paso);
-	ctx.lineTo(margen + largo,paso);		// Líneas horizontales
-	ctx.stroke();
-}	
-
-//* COLOCAR ETIQUETAS DE ANIMALES EN EL MAPA
-var lista = document.getElementById("animalList");
-var lista_respaldo = "";
-
-for (let m = 0; m < n; m++) {
-	ctx.font = `${Math.max(12, Math.round(cellSize * 0.75))}px Arial`;
-	ctx.fillStyle = "black";
-	ctx.textAlign = "center";
-	ctx.textBaseline = "middle";
-	
-	// Obtener coordenadas de la neurona ganadora para este animal
-	let X = PosMn[0][m];
-	let Y = PosMn[1][m];
-	
-	// Convertir coordenadas de grilla a píxeles del canvas
-	// Agregar pequeña variación aleatoria para evitar superposición
-	let x = margen + (X + 0.5) * cellSize + getRandom1(-0.1, 0.1) * cellSize;
-	let y = margen + (Y + 0.5) * cellSize + getRandom1(-0.1, 0.1) * cellSize;
-	
-	// Dibujar nombre del animal en el canvas
-	ctx.fillText(Animales[m],x,y);
-	
-	// Crear etiqueta para mostrar en la lista
-	label_animal = Animales[m] + " = [" + Math.round(x)+ ", " + Math.round(y) + "] ";
-	let animalEntry = document.createElement("span");
-	animalEntry.className = "animal-entry";
-	animalEntry.textContent = label_animal;
-	lista.append(animalEntry);
-	lista_respaldo = lista_respaldo + "<label>" + label_animal + "</label>";
+// Muestra las coordenadas XYZ de cada animal en la lista bajo el canvas.
+var animalList = document.getElementById('animalList');
+animalList.replaceChildren();
+for (var listIndex = 0; listIndex < SOM3D_ANIMALS; listIndex++) {
+	var animalEntry = document.createElement('span');
+	animalEntry.className = 'animal-entry';
+	animalEntry.textContent = `${Animales[listIndex]} = [${PosMn[0][listIndex]}, ${PosMn[1][listIndex]}, ${PosMn[2][listIndex]}]`;
+	animalList.append(animalEntry);
 }
 
-// FUNCIÓN AUXILIAR PARA NÚMEROS ALEATORIOS EN RANGO
-function getRandom1(min, max) {
-  return Math.random() * (max - min) + min;
-}
-
-// + FUNCIONES PARA ANIMAL NUEVO +
-var anterior = "";
-var start = 0;
-
-// FUNCIÓN PARA PROCESAR UN NUEVO ANIMAL
-function cargar_nuevo(){
-	console.log("Procesando nuevo animal...");
-	
-	var map2 = document.getElementById('map');
-	var ctx2 = map2.getContext('2d');
-	
-	// Obtener valores del formulario
-	var nuevo = document.getElementById('nuevo').value;
-	var Tamano = document.getElementById('Tamano').value;
-	var Hogar = document.getElementById('Hogar').value;	
-	var Cuatro_Patas = document.getElementById('Cuatro_Patas').value;
-	var Cazador = document.getElementById('Cazador').value;
-	var Corre = document.getElementById('Corre').value;
-	var Plumas = document.getElementById('Plumas').value;
-	var Pelo = document.getElementById('Pelo').value;
-	var Nadador = document.getElementById('Nadador').value;
-	var Trepa = document.getElementById('Trepa').value;
-	var Colmillos = document.getElementById('Colmillos').value;
-	var Cuernos = document.getElementById('Cuernos').value;
-
-	// Verificar que todos los campos estén completos
-	if(nuevo != '' & Tamano != '' & Hogar != '' & Cuatro_Patas != '' & Cazador != '' & Corre != '' & Plumas != '' & Pelo != '' & Nadador != '' & Trepa != '' & Colmillos != '' & Cuernos != ''){
-		lista.innerHTML = '';		
-		
-		// Crear vector de características del nuevo animal
-		nuevo_animal = [parseFloat(Tamano),parseFloat(Hogar),parseFloat(Cuatro_Patas),parseFloat(Cazador),parseFloat(Corre),parseFloat(Plumas),parseFloat(Pelo),parseFloat(Nadador),parseFloat(Trepa),parseFloat(Colmillos),parseFloat(Cuernos)];
-		
-		// ENCONTRAR LA NEURONA GANADORA PARA EL NUEVO ANIMAL
-		let mn2 = Infinity;
-		for (let x = 0; x < FC; x++) {//3
-			for (let u = 0; u < FC; u++) {//4
-				let D2=0;
-				// Calcular distancia entre nuevo animal y esta neurona
-				for (let l = 0; l < N; l++) {//5
-					 D2+=Math.abs( nuevo_animal[l] - W[l + u * N + x * FC * N]);
-				}
-				// Si es la neurona más cercana, guardar sus coordenadas
-				if(D2 < mn2 ){
-					mn2=D2;
-					PosMn[0][n]=x;  // Coordenada X de la neurona ganadora
-					PosMn[1][n]=u;  // Coordenada Y de la neurona ganadora
-				}
-			}
-		}
-
-		// DIBUJAR EL NUEVO ANIMAL EN EL MAPA
-		ctx2.font = '12px Arial';
-		/* ctx2.fillStyle = "red"; */  // Color rojo para distinguir el nuevo animal
-		
-		// Convertir coordenadas de grilla a píxeles
-		let X = PosMn[0][n];
-		let Y = PosMn[1][n]
-		let x = ((X * largo )/n);
-		let y = ((Y * largo )/n);
-		
-		// Dibujar nombre del nuevo animal
-		ctx2.fillText(nuevo,x,y);		
-		start = 1;
-		
-		// Actualizar lista con el nuevo animal
-		label_animal = "Nuevo! " + nuevo + " (" + Math.round(x)+ "," + Math.round(y) + "), ";
-		lista_respaldo = lista_respaldo + "<label>" + label_animal + "&nbsp</label>";
-		lista.innerHTML = lista_respaldo;
-		
-		console.log("Nuevo animal '" + nuevo + "' colocado en posición [" + Math.round(x) + "," + Math.round(y) + "]");
-	}
-}		
+drawSOM3D();
+window.addEventListener('resize', drawSOM3D);
