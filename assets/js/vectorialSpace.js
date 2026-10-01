@@ -331,3 +331,53 @@ for (var listIndex = 0; listIndex < SOM3D_ANIMALS; listIndex++) {
 
 drawSOM3D();
 window.addEventListener('resize', drawSOM3D);
+
+// Busca la BMU del animal nuevo y lo añade al mapa sin volver a entrenar los pesos.
+function cargar_nuevo() {
+	var animalName = document.getElementById('emoji').value.trim();
+	var fieldIds = [
+		'travel', 'ecosistem', 'habitats', 'size', 'diet',
+		'activity', 'social-structure', 'reproduction', 'climate', 'lifespan',
+		'body-covering', 'animal-group', 'thermoregulation', 'parental-care',
+		'offspring-count', 'communication', 'defense', 'migration',
+		'distribution', 'conservation'
+	];
+	var rawFeatures = fieldIds.map(function (id) {
+		return document.getElementById(id).value;
+	});
+	var animalForm = document.querySelector('form');
+	var hasImportedCurrentForm = animalForm.dataset.imported === 'true';
+
+	if (!animalName || rawFeatures.some(function (value) { return value === ''; })) {
+		animalForm.dataset.imported = 'false';
+		return;
+	}
+
+	if (hasImportedCurrentForm) {
+		return;
+	}
+
+	var features = rawFeatures.map(Number);
+	if (features.length !== SOM3D_FEATURES || !features.every(Number.isFinite)) {
+		return;
+	}
+
+	var position = som3DFindWinner(features);
+	Animales.push(animalName);
+	Caract.push(features);
+	PosMn[0].push(position.x);
+	PosMn[1].push(position.y);
+	PosMn[2].push(position.z);
+	SOM3D_ANIMALS = Animales.length;
+	animalForm.dataset.imported = 'true';
+
+	var animalEntry = document.createElement('span');
+	animalEntry.className = 'animal-entry';
+	animalEntry.textContent = `${animalName} = [${position.x}, ${position.y}, ${position.z}]`;
+	animalList.append(animalEntry);
+	drawSOM3D();
+}
+
+var animalFormControls = document.querySelector('form');
+animalFormControls.addEventListener('input', cargar_nuevo);
+animalFormControls.addEventListener('change', cargar_nuevo);
