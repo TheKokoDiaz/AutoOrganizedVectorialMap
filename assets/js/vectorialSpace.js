@@ -4,46 +4,77 @@ function getRandom() {
 }
 
 //+ DATOS DE ENTRENAMIENTO +
-// Lista de 20 animales que usaremos para entrenar el mapa
+// Lista de 45 animales que usaremos para entrenar el mapa
 var Animales=[
-    'León',
-    'Puma',
-    'Tigre',
-    'Mono',
-    'Oso',
-    'Caballo',
-    'Jirafa', 
-    'Elefante', 
-    'Hipopótamo', 
-    'Rinoceronte',
-    'Perro',
-    'Cerdo',
-    'Vaca',
-    'Pato',
-    'Ganzo',
-    'Conejo',
-    'Cabra', 
-    'Gato', 
-    'Cebra', 
-    'Gallina',
-    'Ajolote',
-    'Hamster',
-    'Tortuga'
+	'🦁', // León
+	'🐆', // Puma
+	'🐅', // Tigre
+	'🐒', // Mono
+	'🐻', // Oso
+	'🐎', // Caballo
+	'🦒', // Jirafa
+	'🐘', // Elefante
+	'🦛', // Hipopótamo
+	'🦏', // Rinoceronte
+	'🐕', // Perro
+	'🐖', // Cerdo
+	'🐄', // Vaca
+	'🦆', // Pato
+	'🪿', // Ganso
+	'🐇', // Conejo
+	'🐐', // Cabra
+	'🐈', // Gato
+	'🦓', // Cebra
+	'🐓', // Gallina
+	'🦎', // Ajolote
+	'🐹', // Hámster
+	'🐢', // Tortuga
+	'🦊', // Zorro
+	'🐺', // Lobo
+	'🦌', // Venado
+	'🫎', // Alce
+	'🦘', // Canguro
+	'🐨', // Koala
+	'🐼', // Panda
+	'🦥', // Perezoso
+	'🦦', // Nutria
+	'🦫', // Castor
+	'🦇', // Murciélago
+	'🦅', // Águila
+	'🦉', // Búho
+	'🐧', // Pingüino
+	'🦩', // Flamenco
+	'🦚', // Pavo real
+	'🐊', // Cocodrilo
+	'🐍', // Serpiente
+	'🐸', // Rana
+	'🐬', // Delfín
+	'🐋', // Ballena
+	'🐙'  // Pulpo
 ];
 
 // Características
 var etiquetas = [
-    'Tamano',
-    'Hogar',
-    'Cuatro_Patas',
-    'Cazador',
-    'Corre',
-    'Plumas',
-    'Pelo',
-    'Nadador',
-    'Trepa',
-    'Colmillos',
-    'Cuernos'
+	'Movilidad',
+	'Ecosistema',
+	'Habitat',
+	'Tamanio',
+	'Alimentacion',
+	'Actividad',
+	'Organizacion_social',
+	'Reproduccion',
+	'Clima_predominante',
+	'Longevidad',
+	'Cubierta_corporal',
+	'Grupo_zoologico',
+	'Regulacion_termica',
+	'Cuidado_parental',
+	'Número_de_crias_por_camada',
+	'Comunicacion_predominante',
+	'Defensa_principal',
+	'Patron_migratorio',
+	'Distribucion_geografica',
+	'Estado_de_conservacion'
 ];
 
 // MATRIZ DE CARACTERÍSTICAS DE LOS ANIMALES
