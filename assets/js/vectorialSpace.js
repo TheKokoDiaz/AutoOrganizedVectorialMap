@@ -274,8 +274,10 @@ for (let m = 0; m < n; m++) {
 	
 	// Crear etiqueta para mostrar en la lista
 	label_animal = Animales[m] + " = [" + Math.round(x)+ ", " + Math.round(y) + "] ";
-	let la = document.createElement("label");
-	lista.append(label_animal, la);
+	let animalEntry = document.createElement("span");
+	animalEntry.className = "animal-entry";
+	animalEntry.textContent = label_animal;
+	lista.append(animalEntry);
 	lista_respaldo = lista_respaldo + "<label>" + label_animal + "</label>";
 }
 
@@ -336,7 +338,7 @@ function cargar_nuevo(){
 
 		// DIBUJAR EL NUEVO ANIMAL EN EL MAPA
 		ctx2.font = '12px Arial';
-		ctx2.fillStyle = "red";  // Color rojo para distinguir el nuevo animal
+		/* ctx2.fillStyle = "red"; */  // Color rojo para distinguir el nuevo animal
 		
 		// Convertir coordenadas de grilla a píxeles
 		let X = PosMn[0][n];
@@ -346,7 +348,7 @@ function cargar_nuevo(){
 		
 		// Dibujar nombre del nuevo animal
 		ctx2.fillText(nuevo,x,y);		
-		start=1;
+		start = 1;
 		
 		// Actualizar lista con el nuevo animal
 		label_animal = "Nuevo! " + nuevo + " (" + Math.round(x)+ "," + Math.round(y) + "), ";
