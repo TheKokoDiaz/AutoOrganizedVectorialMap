@@ -1,3 +1,15 @@
 * {
     font-family: "Raleway";
 }
+
+#map{
+    width: 500px;
+    height: 500px;
+    
+    border:1px solid black;
+
+    padding: 0;
+    margin: auto;
+    
+    display: block;
+}

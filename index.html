@@ -24,22 +24,31 @@
 <body>
     <!-- ENCABEZADO -->
     <header>
-        <div class="100">
+        <div class="row100">
             <h1>Mapa auto-organizado</h1>
         </div>
 
-        <p><strong>Materia:</strong> Sistemas Inteligentes</p>
-        <p><strong>Docente:</strong> Mtro. Samuel Mendez Vega</p>
+        <div class="row50">
+            <p><strong>Materia:</strong> Sistemas Inteligentes</p>
+            <p><strong>Docente:</strong> Mtro. Samuel Mendez Vega</p>
+        </div>
+        
+        <div class="row50">
+            <p><strong>Estudiante:</strong> Julio Alfredo Vázquez Díaz</p>
+            <p><strong>Grupo:</strong> 9°B de ITI</p>
+        </div>
     </header>
 
     <!-- MAPA -->
     <main>
+        <h2>Mapa</h2>
         <canvas id="map"></canvas>
     </main>
 
     <!-- FORMULARIO -->
     <section>
         <form action="">
+            <h2>Añadir un nuevo animal</h2>
             <fieldset>
                 <div class="question">
                     <label for="emoji">Emoji o Nombre:</label>
@@ -299,6 +308,11 @@
                 </div>
             </fieldset>
         </form>
+    </section>
+
+    <section>
+        <h2>Coordenadas iniciales</h2>
+        <div id="animalList"></div>
     </section>
 
     <!-- SCRIPTS -->

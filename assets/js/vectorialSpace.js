@@ -77,57 +77,80 @@ var etiquetas = [
 	'Estado_de_conservacion'
 ];
 
-// MATRIZ DE CARACTERÍSTICAS DE LOS ANIMALES
-// Cada fila representa un animal, cada columna una característica
-// Los valores están normalizados entre 0 y 1
+// + MATRIZ DE CARACTERÍSTICAS DE LOS ANIMALES +
 var Caract = [
-// Tamaño,Hogar,Patas,Cazador,Corre,Plumas,Pelo,Nadador,Trepa,Colmillos,Cuernos
-[0.66,0.99,1,1,1,0,1,0,0,1,0],//'León'     - Grande, zoológico, 4 patas, cazador, corre, sin plumas, con pelo, no nada, no trepa, con colmillos, sin cuernos
-[0.66,0.99,1,1,1,0,1,0,1,1,0],//'Puma'     - Similar al león pero trepa
-[0.66,0.99,1,1,1,0,1,0,1,1,0],//'Tigre'    - Similar al león pero trepa
-[0.66,0.99,0,0,1,0,1,0,1,1,0],//'Mono'     - Mediano, zoológico, sin 4 patas (bípedo), no cazador, corre, sin plumas, con pelo, no nada, trepa, con colmillos, sin cuernos
-[0.99,0.99,1,1,0,0,1,0,0,1,0],//'Oso'      - Grande, zoológico, 4 patas, cazador, no corre, sin plumas, con pelo, no nada, no trepa, con colmillos, sin cuernos
-[0.99,0.33,1,0,1,0,1,0,0,0,0],//'Caballo'  - Grande, granja, 4 patas, no cazador, corre, sin plumas, con pelo, no nada, no trepa, sin colmillos, sin cuernos
-[0.99,0.99,1,0,1,0,0,0,0,0,1],//'Jirafa'   - Grande, zoológico, 4 patas, no cazador, corre, sin plumas, sin pelo, no nada, no trepa, sin colmillos, con cuernos
-[0.99,0.99,1,0,0,0,0,1,0,0,1],//'Elefante' - Grande, zoológico, 4 patas, no cazador, no corre, sin plumas, sin pelo, nada, no trepa, sin colmillos, con cuernos (colmillos)
-[0.99,0.99,1,0,0,0,0,1,0,1,0],//'Hipopótamo' - Grande, zoológico, 4 patas, no cazador, no corre, sin plumas, sin pelo, nada, no trepa, con colmillos, sin cuernos
-[0.99,0.99,1,0,1,0,0,0,0,0,1],//'Rinoceronte' - Grande, zoológico, 4 patas, no cazador, corre, sin plumas, sin pelo, no nada, no trepa, sin colmillos, con cuernos
-[0.33,0.66,1,0,1,0,1,1,0,1,0],//'Perro'    - Pequeño, casa, 4 patas, no cazador, corre, sin plumas, con pelo, nada, no trepa, con colmillos, sin cuernos
-[0.66,0.33,1,0,0,0,0,0,0,0,0],//'Cerdo'    - Mediano, granja, 4 patas, no cazador, no corre, sin plumas, sin pelo, no nada, no trepa, sin colmillos, sin cuernos
-[0.66,0.33,1,0,0,0,0,0,0,0,1],//'Vaca'     - Mediana, granja, 4 patas, no cazador, no corre, sin plumas, sin pelo, no nada, no trepa, sin colmillos, con cuernos
-[0.33,0.33,0,0,0,1,0,1,0,0,0],//'Pato'     - Pequeño, granja, sin 4 patas, no cazador, no corre, con plumas, sin pelo, nada, no trepa, sin colmillos, sin cuernos
-[0.33,0.33,0,0,0,1,0,1,0,0,0],//'Ganso'    - Similar al pato
-[0.33,0.33,1,0,1,0,1,0,0,0,0],//'Conejo'   - Pequeño, granja, 4 patas, no cazador, corre, sin plumas, con pelo, no nada, no trepa, sin colmillos, sin cuernos
-[0.33,0.33,1,0,1,0,1,0,1,0,1],//'Cabra'    - Pequeña, granja, 4 patas, no cazador, corre, sin plumas, con pelo, no nada, trepa, sin colmillos, con cuernos
-[0.33,0.66,1,0,1,0,1,0,1,0,0],//'Gato'     - Pequeño, casa, 4 patas, no cazador, corre, sin plumas, con pelo, no nada, trepa, sin colmillos, sin cuernos
-[0.66,0.99,1,0,1,0,0,0,0,0,0],//'Cebra'    - Mediana, zoológico, 4 patas, no cazador, corre, sin plumas, sin pelo, no nada, no trepa, sin colmillos, sin cuernos
-[0.33,0.33,0,0,1,1,0,0,0,0,0],//'Gallina'  - Pequeña, granja, sin 4 patas, no cazador, corre, con plumas, sin pelo, no nada, no trepa, sin colmillos, sin cuernos
+	// Perfiles representativos en el mismo orden que etiquetas y los selectores HTML.
+	[0.4,0.62,0.80,0.64,0.22,0.6,0.50,0.50,0.72,0.48,0.12,0.12,0.25,0.60,0.32,0.80,0.75,0.20,0.60,0.48], // León
+	[0.4,0.62,0.80,0.64,0.22,0.6,0.12,0.50,0.96,0.48,0.12,0.12,0.25,0.60,0.32,0.80,0.12,0.20,0.60,0.16], // Puma
+	[0.4,0.62,0.80,0.64,0.22,0.4,0.12,0.50,0.56,0.48,0.12,0.12,0.25,0.60,0.32,0.80,0.75,0.20,0.40,0.64], // Tigre
+	[0.8,0.12,0.16,0.48,0.33,0.2,0.37,0.50,0.56,0.48,0.12,0.12,0.25,0.60,0.32,0.80,0.62,0.20,0.60,0.16], // Mono
+	[0.4,0.62,0.80,0.64,0.33,0.8,0.12,0.50,0.96,0.48,0.12,0.12,0.25,0.60,0.32,0.80,0.75,0.20,0.60,0.32], // Oso
+	[0.4,0.62,0.80,0.64,0.11,0.2,0.50,0.50,0.32,0.48,0.12,0.12,0.25,0.60,0.16,0.80,0.25,0.20,0.80,0.16], // Caballo
+	[0.4,0.62,0.80,0.80,0.11,0.2,0.50,0.50,0.72,0.48,0.12,0.12,0.25,0.60,0.16,0.80,0.25,0.40,0.40,0.48], // Jirafa
+	[0.4,0.62,0.80,0.80,0.11,0.8,0.37,0.50,0.72,0.64,0.50,0.12,0.25,0.80,0.16,0.80,0.62,0.40,0.40,0.64], // Elefante
+	[0.6,0.50,0.48,0.80,0.11,0.4,0.50,0.50,0.56,0.64,0.50,0.12,0.25,0.60,0.16,0.80,0.75,0.20,0.40,0.48], // Hipopótamo
+	[0.4,0.62,0.80,0.80,0.11,0.6,0.12,0.50,0.72,0.64,0.50,0.12,0.25,0.60,0.16,0.80,0.75,0.20,0.40,0.80], // Rinoceronte
+	[0.4,0.62,0.80,0.48,0.33,0.8,0.37,0.50,0.96,0.32,0.12,0.12,0.25,0.60,0.32,0.80,0.62,0.20,0.80,0.16], // Perro
+	[0.4,0.62,0.80,0.48,0.33,0.2,0.50,0.50,0.56,0.32,0.12,0.12,0.25,0.60,0.48,0.80,0.25,0.20,0.80,0.16], // Cerdo
+	[0.4,0.62,0.80,0.64,0.11,0.2,0.50,0.50,0.32,0.48,0.12,0.12,0.25,0.60,0.16,0.80,0.62,0.20,0.80,0.16], // Vaca
+	[0.8,0.50,0.48,0.32,0.33,0.2,0.62,0.25,0.96,0.32,0.25,0.25,0.25,0.40,0.48,0.16,0.25,0.40,0.80,0.16], // Pato
+	[0.8,0.50,0.48,0.48,0.11,0.2,0.62,0.25,0.32,0.48,0.25,0.25,0.25,0.60,0.32,0.16,0.62,0.40,0.80,0.16], // Ganso
+	[0.4,0.62,0.64,0.32,0.11,0.6,0.37,0.50,0.32,0.32,0.12,0.12,0.25,0.60,0.80,0.80,0.25,0.20,0.80,0.16], // Conejo
+	[0.4,0.62,0.80,0.48,0.11,0.2,0.50,0.50,0.32,0.48,0.12,0.12,0.25,0.60,0.32,0.80,0.25,0.20,0.80,0.16], // Cabra
+	[0.4,0.62,0.80,0.32,0.22,0.4,0.12,0.50,0.96,0.32,0.12,0.12,0.25,0.60,0.32,0.80,0.75,0.20,0.80,0.16], // Gato
+	[0.4,0.62,0.80,0.64,0.11,0.2,0.50,0.50,0.72,0.48,0.12,0.12,0.25,0.60,0.16,0.80,0.25,0.40,0.40,0.32], // Cebra
+	[0.8,0.62,0.80,0.32,0.33,0.2,0.62,0.25,0.96,0.32,0.25,0.25,0.25,0.40,0.48,0.16,0.25,0.20,0.80,0.16], // Gallina
+	[0.6,0.50,0.48,0.16,0.22,0.4,0.12,0.25,0.24,0.32,0.50,0.50,0.50,0.20,0.80,0.48,0.12,0.20,0.20,0.80], // Ajolote
+	[0.4,0.25,0.64,0.16,0.33,0.4,0.12,0.50,0.64,0.16,0.12,0.12,0.25,0.40,0.48,0.48,0.25,0.20,0.40,0.16], // Hámster
+	[0.4,0.25,0.80,0.32,0.11,0.2,0.12,0.25,0.64,0.80,0.62,0.37,0.50,0.20,0.80,0.32,0.37,0.20,0.60,0.32], // Tortuga
+	[0.4,0.62,0.80,0.32,0.33,0.4,0.12,0.50,0.96,0.32,0.12,0.12,0.25,0.60,0.32,0.80,0.12,0.20,0.80,0.16], // Zorro
+	[0.4,0.62,0.80,0.64,0.22,0.4,0.50,0.50,0.96,0.48,0.12,0.12,0.25,0.80,0.32,0.16,0.62,0.20,0.60,0.16], // Lobo
+	[0.4,0.62,0.80,0.64,0.11,0.6,0.50,0.50,0.32,0.48,0.12,0.12,0.25,0.60,0.16,0.80,0.25,0.40,0.60,0.16], // Venado
+	[0.4,0.62,0.80,0.80,0.11,0.6,0.12,0.50,0.16,0.48,0.12,0.12,0.25,0.60,0.16,0.16,0.75,0.40,0.40,0.16], // Alce
+	[0.4,0.25,0.80,0.64,0.11,0.4,0.37,0.50,0.72,0.48,0.12,0.12,0.25,0.60,0.16,0.80,0.75,0.20,0.40,0.16], // Canguro
+	[0.4,0.62,0.16,0.32,0.11,0.4,0.12,0.50,0.48,0.48,0.12,0.12,0.25,0.60,0.16,0.16,0.75,0.20,0.20,0.64], // Koala
+	[0.4,0.62,0.80,0.64,0.11,0.8,0.12,0.50,0.24,0.48,0.12,0.12,0.25,0.60,0.16,0.16,0.75,0.20,0.20,0.48], // Panda
+	[0.4,0.12,0.16,0.32,0.11,0.8,0.12,0.50,0.80,0.48,0.12,0.12,0.25,0.60,0.16,0.64,0.12,0.20,0.40,0.16], // Perezoso
+	[0.6,0.50,0.48,0.32,0.22,0.4,0.37,0.50,0.96,0.32,0.12,0.12,0.25,0.60,0.32,0.80,0.62,0.20,0.60,0.32], // Nutria
+	[0.8,0.50,0.48,0.32,0.11,0.4,0.37,0.50,0.32,0.48,0.12,0.12,0.25,0.60,0.32,0.48,0.62,0.20,0.60,0.16], // Castor
+	[0.2,0.62,0.32,0.16,0.44,0.4,0.87,0.50,0.96,0.48,0.12,0.12,0.25,0.60,0.16,0.16,0.25,0.80,0.80,0.16], // Murciélago
+	[0.2,0.62,0.16,0.48,0.22,0.2,0.25,0.25,0.96,0.48,0.25,0.25,0.25,0.60,0.32,0.16,0.25,0.40,0.60,0.16], // Águila
+	[0.2,0.62,0.16,0.32,0.22,0.4,0.12,0.25,0.96,0.48,0.25,0.25,0.25,0.60,0.32,0.16,0.12,0.20,0.60,0.16], // Búho
+	[0.8,0.37,0.48,0.32,0.55,0.2,0.87,0.25,0.08,0.48,0.25,0.25,0.25,0.80,0.32,0.16,0.62,0.40,0.40,0.32], // Pingüino
+	[0.8,0.50,0.48,0.48,0.88,0.2,0.62,0.25,0.56,0.48,0.25,0.25,0.25,0.60,0.16,0.16,0.62,0.40,0.60,0.16], // Flamenco
+	[0.8,0.62,0.80,0.48,0.33,0.2,0.37,0.25,0.56,0.32,0.25,0.25,0.25,0.40,0.32,0.32,0.25,0.20,0.40,0.16], // Pavo real
+	[0.6,0.50,0.48,0.64,0.22,0.4,0.12,0.25,0.56,0.64,0.37,0.37,0.50,0.40,0.80,0.16,0.37,0.20,0.60,0.16], // Cocodrilo
+	[0.4,0.62,0.80,0.32,0.22,0.4,0.12,0.75,0.56,0.48,0.37,0.37,0.50,0.20,0.48,0.48,0.50,0.20,0.80,0.16], // Serpiente
+	[0.8,0.50,0.48,0.16,0.44,0.4,0.37,0.25,0.80,0.32,0.50,0.50,0.50,0.20,0.80,0.16,0.50,0.20,0.80,0.16], // Rana
+	[0.6,0.37,0.48,0.64,0.55,0.2,0.37,0.50,0.96,0.64,0.50,0.12,0.25,0.60,0.16,0.16,0.62,0.40,0.80,0.32], // Delfín
+	[0.6,0.37,0.48,0.80,0.88,0.8,0.37,0.50,0.96,0.80,0.50,0.12,0.25,0.60,0.16,0.16,0.62,0.40,0.80,0.48], // Ballena
+	[0.6,0.37,0.48,0.48,0.22,0.4,0.12,0.25,0.96,0.16,0.50,0.75,0.50,0.40,0.80,0.32,0.12,0.20,0.80,0.16] // Pulpo
 ];
 
 // + PARÁMETROS DEL SOM +
-var medida= 500;                    // Tamaño del canvas en píxeles
-var map = document.getElementById('map'); // Referencia al canvas
-var ctx = map.getContext('2d');     // Contexto 2D para dibujar
-var margen = medida*0.05;           // Margen del 5% del canvas
-var largo = medida - margen;        // Área útil del canvas
-var R=10;                           // Número de iteraciones de entrenamiento (épocas)
-var FC=20;                          // Tamaño de la grilla del mapa (20x20 = 400 neuronas)
-var N=Caract[0].length;            // Número de características por animal (11)
-var n = Caract.length;             // Número de animales en el dataset (20)
-var k= FC*FC*N;                    // Número total de pesos (20*20*11 = 4400)
+var medida= 500;                    		// Tamaño del canvas en píxeles
+var map = document.getElementById('map'); 	// Referencia al canvas
+var ctx = map.getContext('2d');     		// Contexto 2D para dibujar
+var margen = medida;           				// Margen del 5% del canvas
+var largo = medida;        					// Área útil del canvas
+var R = 10;                           		// Número de iteraciones de entrenamiento (épocas)
+var FC = 20;                         		// Tamaño de la grilla del mapa (20x20 = 400 neuronas)
+var N = Caract[0].length;            		// Número de características por animal (20)
+var n = Caract.length;             			// Número de animales en el dataset (45)
+var k = FC*FC*N;                    		// Número total de pesos (20*20*20 = 8000)
 
-// INICIALIZACIÓN DE PESOS
+//* INICIALIZACIÓN DE PESOS
 // Matriz de pesos W: cada neurona tiene N pesos (uno por característica)
 // Los pesos se inicializan aleatoriamente entre 0 y 1
 var W = Array.from({length: k}, () => Math.random());
 
-// PARÁMETROS DE ENTRENAMIENTO
-var DS=1;	// Desviación estándar inicial para la función de vecindad
+//* PARÁMETROS DE ENTRENAMIENTO
+var DS = 1;	// Desviación estándar inicial para la función de vecindad
 
 // + ALGORITMO DE ENTRENAMIENTO SOM +
 console.log("Iniciando entrenamiento del SOM...");
 
-// BUCLE PRINCIPAL DE ENTRENAMIENTO
+//* BUCLE PRINCIPAL DE ENTRENAMIENTO
 for (let r = 0; r < R; r++) {//1 - Para cada época de entrenamiento
 	console.log("Época " + (r+1) + "/" + R);
 	
@@ -190,14 +213,14 @@ for (let r = 0; r < R; r++) {//1 - Para cada época de entrenamiento
 	// ACTUALIZACIÓN DE BARRA DE PROGRESO
 	progreso = Math.round(r/R*100) + 10;
 	if(progreso>=100){
-		document.getElementById('train_label').innerHTML  = "Mapa Listo! <i class='fa fa-fw fa-thumbs-o-up'></i>";
+		/* document.getElementById('train_label').innerHTML  = "Mapa Listo! <i class='fa fa-fw fa-thumbs-o-up'></i>"; */
 		progreso = 100;
 		console.log("Entrenamiento completado!");
 	}
 	else{
-		document.getElementById('train_label').innerHTML  = "Cargando Mapa <i class='fa fa-refresh fa-spin'></i> " + progreso + '%';							
+		/* document.getElementById('train_label').innerHTML  = "Cargando Mapa <i class='fa fa-refresh fa-spin'></i> " + progreso + '%';							 */
 	}
-	document.getElementById('train_div').style.width  = progreso + '%';
+	/* document.getElementById('train_div').style.width  = progreso + '%'; */
 }
 
 // + VISUALIZACIÓN DEL MAPA +
@@ -224,8 +247,8 @@ for (let m = 1; m <= n; m++) {
 	ctx.stroke();
 }	
 
-// COLOCAR ETIQUETAS DE ANIMALES EN EL MAPA
-var lista = document.getElementById("lista_animales");
+//* COLOCAR ETIQUETAS DE ANIMALES EN EL MAPA
+var lista = document.getElementById("animalList");
 var lista_respaldo = "";
 
 for (let m = 0; m < n; m++) {
@@ -245,7 +268,7 @@ for (let m = 0; m < n; m++) {
 	ctx.fillText(Animales[m],x,y);
 	
 	// Crear etiqueta para mostrar en la lista
-	label_animal = Animales[m] + " = [" + Math.round(x)+ "," + Math.round(y) + "]," +" ";
+	label_animal = Animales[m] + " = [" + Math.round(x)+ ", " + Math.round(y) + "] ";
 	let la = document.createElement("label");
 	lista.append(label_animal, la);
 	lista_respaldo = lista_respaldo + "<label>" + label_animal + "</label>";
