@@ -128,11 +128,13 @@ var Caract = [
 ];
 
 // + PARÁMETROS DEL SOM +
-var medida= 500;                    		// Tamaño del canvas en píxeles
 var map = document.getElementById('map'); 	// Referencia al canvas
 var ctx = map.getContext('2d');     		// Contexto 2D para dibujar
-var margen = medida;           				// Margen del 5% del canvas
-var largo = medida;        					// Área útil del canvas
+
+var medida= map.width;                    	// Tamaño del canvas en píxeles
+var margen = medida * 0.05;           		// Margen del 5% del canvas
+var largo = medida - 2 * margen;        	// Área útil del canvas
+
 var R = 10;                           		// Número de iteraciones de entrenamiento (épocas)
 var FC = 20;                         		// Tamaño de la grilla del mapa (20x20 = 400 neuronas)
 var N = Caract[0].length;            		// Número de características por animal (20)
@@ -230,20 +232,21 @@ console.log("Dibujando mapa...");
 ctx.lineWidth = 0.5;
 ctx.beginPath();			
 ctx.moveTo(margen, margen);
-ctx.lineTo(margen, largo);		// Línea vertical izquierda
-ctx.moveTo(margen,margen);
-ctx.lineTo(largo,margen);		// Línea horizontal superior
+ctx.lineTo(margen, margen + largo);		// Línea vertical izquierda
+ctx.moveTo(margen, margen);
+ctx.lineTo(margen + largo, margen);		// Línea horizontal superior
 ctx.stroke();
 
 // Dibujar líneas de la cuadrícula
-for (let m = 1; m <= n; m++) {
-	paso = ((largo/n)*m) + margen;
+var cellSize = largo / FC;
+for (let m = 1; m <= FC; m++) {
+	paso = (cellSize * m) + margen;
 	ctx.lineWidth = 0.5;
 	ctx.beginPath();			
 	ctx.moveTo(paso, margen);
-	ctx.lineTo(paso, largo);		// Líneas verticales
+	ctx.lineTo(paso, margen + largo);		// Líneas verticales
 	ctx.moveTo(margen,paso);
-	ctx.lineTo(largo,paso);		// Líneas horizontales
+	ctx.lineTo(margen + largo,paso);		// Líneas horizontales
 	ctx.stroke();
 }	
 
@@ -252,8 +255,10 @@ var lista = document.getElementById("animalList");
 var lista_respaldo = "";
 
 for (let m = 0; m < n; m++) {
-	ctx.font = '10px Arial';
+	ctx.font = `${Math.max(12, Math.round(cellSize * 0.75))}px Arial`;
 	ctx.fillStyle = "black";
+	ctx.textAlign = "center";
+	ctx.textBaseline = "middle";
 	
 	// Obtener coordenadas de la neurona ganadora para este animal
 	let X = PosMn[0][m];
@@ -261,8 +266,8 @@ for (let m = 0; m < n; m++) {
 	
 	// Convertir coordenadas de grilla a píxeles del canvas
 	// Agregar pequeña variación aleatoria para evitar superposición
-	let x = ((X * largo )/n)* getRandom1(0.9,1.1);
-	let y = ((Y * largo)/n)* getRandom1(0.9,1.1);
+	let x = margen + (X + 0.5) * cellSize + getRandom1(-0.1, 0.1) * cellSize;
+	let y = margen + (Y + 0.5) * cellSize + getRandom1(-0.1, 0.1) * cellSize;
 	
 	// Dibujar nombre del animal en el canvas
 	ctx.fillText(Animales[m],x,y);
