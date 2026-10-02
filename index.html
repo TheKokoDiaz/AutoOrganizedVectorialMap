@@ -24,18 +24,18 @@
 <body>
     <!-- ENCABEZADO -->
     <header>
-        <div class="row100">
+        <div>
             <h1>Mapa auto-organizado</h1>
         </div>
 
-        <div class="row50">
+        <div>
             <p><strong>Materia:</strong> Sistemas Inteligentes</p>
             <p><strong>Docente:</strong> Mtro. Samuel Mendez Vega</p>
         </div>
         
-        <div class="row50">
-            <p><strong>Estudiante:</strong> Julio Alfredo Vázquez Díaz</p>
+        <div>
             <p><strong>Grupo:</strong> 9°B de ITI</p>
+            <p><strong>Estudiante:</strong> Julio Alfredo Vázquez Díaz</p>
         </div>
     </header>
 
@@ -46,14 +46,14 @@
     </main>
 
     <!-- FORMULARIO -->
-    <section>
+    <section class="form">
         <form action="">
             <h2>Añadir un nuevo animal</h2>
             <p>Completa los siguientes campos para añadir un nuevo animal al mapa de forma automática:</p>
             <fieldset>
-                <div class="question">
+                <div class="question row">
                     <label for="emoji">Emoji o Nombre:</label>
-                    <input type="text" name="emoji" id="emoji">
+                    <input type="text" name="emoji" id="emoji" placeholder="Usa Win + . para ver emojis">
                 </div>
 
                 <div class="question">
@@ -304,15 +304,16 @@
                     </select>
                 </div>
 
-                <div class="">
+                <div class="question row">
                     <input type="reset" value="Nuevo +">
                 </div>
             </fieldset>
         </form>
     </section>
 
-    <section>
-        <h2>Coordenadas iniciales</h2>
+    <!-- COORDINATES -->
+    <section class="coordinates">
+        <h2>Coordenadas</h2>
         <div id="animalList"></div>
     </section>
 
