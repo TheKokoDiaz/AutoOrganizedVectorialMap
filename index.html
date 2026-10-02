@@ -327,6 +327,11 @@
                 <label for="epochs">Número de épocas:</label>
                 <input type="number" name="epochs" id="epochs" min="1" max="500" value="8">
             </div>
+            
+            <div class="setting">
+                <label for="rate">Tasa de aprendizaje:</label>
+                <input type="number" name="rate" id="rate" min="0.01" max="0.99" step="0.01" value="0.35">
+            </div>
 
             <div class="setting">
                 <input type="button" value="Aplicar cambios" onclick="saveHyperparameters()">

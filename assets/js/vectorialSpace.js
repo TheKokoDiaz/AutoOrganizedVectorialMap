@@ -178,14 +178,31 @@ function obtainEpochs(){
 		epochs = sessionStorage.epochs;
 	}
 
+	let txtEpochs = document.getElementById('epochs');
+	txtEpochs.value = epochs;
+
 	return epochs;
 }
 
+function obtainRate(){
+	if(sessionStorage.rate == null || sessionStorage.rate == NaN){
+		rate = 0.35;
+	} else {
+		rate = sessionStorage.rate;
+	}
+
+	let txtRate = document.getElementById('rate');
+	txtRate.value = rate;
+
+	return rate;
+}
+
 var SOM3D_EPOCHS = obtainEpochs();
+var SOM3D_LEARNING_RATE = obtainRate();
 
 for (var epoch = 0; epoch < SOM3D_EPOCHS; epoch++) {
 	var progress = epoch / (SOM3D_EPOCHS - 1);
-	var learningRate = 0.35 * Math.exp(-2.2 * progress);
+	var learningRate = SOM3D_LEARNING_RATE * Math.exp(-2.2 * progress);
 	var radius = Math.max(1, SOM3D_SIZE * 0.45 * Math.exp(-3 * progress));
 	var radiusSquared = radius * radius;
 	var animalOrder = Array.from({ length: SOM3D_ANIMALS }, function (_, index) { return index; });
