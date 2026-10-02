@@ -72,8 +72,15 @@ main{
     
     padding: 0.5rem 1rem;
     
-    canvas{
+    #map{
+        width: 100%;
+        aspect-ratio: 1/1;
+        
+        padding: 0;
+        margin: auto;
         border: none;
+        
+        display: block;
     }
 }
 
@@ -143,18 +150,6 @@ main{
             width: 100%;
         }
     }
-}
-
-#map{
-    width: 500px;
-    height: 500px;
-    
-    border: 1px solid black;
-
-    padding: 0;
-    margin: auto;
-    
-    display: block;
 }
 
 .hyperparameters{
