@@ -383,7 +383,7 @@ function cargar_nuevo() {
 	animalForm.dataset.imported = 'true';
 
 	var animalEntry = document.createElement('span');
-	animalEntry.className = 'animal-entry';
+	animalEntry.className = 'animal-entry new-animal';
 	animalEntry.textContent = `${animalName} = [${position.x}, ${position.y}, ${position.z}]`;
 	animalList.append(animalEntry);
 	drawSOM3D();

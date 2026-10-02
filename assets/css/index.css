@@ -59,6 +59,10 @@ header{
         .animal-entry{
             width: 10%;
         }
+
+        .new-animal{
+            font-weight: bold;
+        }
     }
 }
 
