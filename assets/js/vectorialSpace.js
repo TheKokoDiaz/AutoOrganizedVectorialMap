@@ -170,33 +170,42 @@ function som3DFindWinner(vector) {
 	return winner;
 }
 
-// PASO 2: entrena el mapa durante varias épocas con tasa y radio decrecientes.
+// + OBTENER INFORMACIÓN DEL MODELO +
 function obtainEpochs(){
+	// Verificar si hay pre-ajustes
 	if(sessionStorage.epochs == null || sessionStorage.epochs == NaN){
 		epochs = 8;
 	} else {
 		epochs = sessionStorage.epochs;
 	}
-
+	
+	// Actualizar info. del DOM
 	let txtEpochs = document.getElementById('epochs');
+	let lblEpochs = document.getElementById('lblEpochs');
 	txtEpochs.value = epochs;
-
+	lblEpochs.innerHTML = "<strong>- Épocas: </strong>" + epochs;
+	
 	return epochs;
 }
 
 function obtainRate(){
+	// Verificar si hay pre-ajustes
 	if(sessionStorage.rate == null || sessionStorage.rate == NaN){
 		rate = 0.35;
 	} else {
 		rate = sessionStorage.rate;
 	}
-
+	
+	// Actualizar info. del DOM
 	let txtRate = document.getElementById('rate');
+	let lblRate = document.getElementById('lblRate');
 	txtRate.value = rate;
-
+	lblRate.innerHTML = "<strong>- Tasa de aprendizaje: </strong>" + rate;
+	
 	return rate;
 }
 
+// PASO 2: Entrena el mapa durante varias épocas con tasa y radio decrecientes.
 var SOM3D_EPOCHS = obtainEpochs();
 var SOM3D_LEARNING_RATE = obtainRate();
 

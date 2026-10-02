@@ -1,3 +1,9 @@
+// Cerrar ventana inicial
+function closeInitialSettings(){
+    let initialSettings = document.getElementById('blur');
+    initialSettings.style.display = 'none';
+}
+
 // Guardar Hiperprámetros
 function saveHyperparameters(){
     // Campos del formulario
