@@ -171,7 +171,18 @@ function som3DFindWinner(vector) {
 }
 
 // PASO 2: entrena el mapa durante varias épocas con tasa y radio decrecientes.
-var SOM3D_EPOCHS = 8;
+function obtainEpochs(){
+	if(sessionStorage.epochs == null || sessionStorage.epochs == NaN){
+		epochs = 8;
+	} else {
+		epochs = sessionStorage.epochs;
+	}
+
+	return epochs;
+}
+
+var SOM3D_EPOCHS = obtainEpochs();
+
 for (var epoch = 0; epoch < SOM3D_EPOCHS; epoch++) {
 	var progress = epoch / (SOM3D_EPOCHS - 1);
 	var learningRate = 0.35 * Math.exp(-2.2 * progress);

@@ -317,6 +317,23 @@
         <div id="animalList"></div>
     </section>
 
+    <!-- HIPERPARÁMETROS -->
+    <form class="hyperparameters">
+        <h2>Hiperparámetros</h2>
+        <p><strong>Nota:</strong> Al guardar los cambios, la página se reiniciará para entrenar al modelo con los nuevos cambios. Hacer esto eliminará cualquier animal extra añadido.</p>
+
+        <fieldset>
+            <div class="setting">
+                <label for="epochs">Número de épocas:</label>
+                <input type="number" name="epochs" id="epochs" min="1" max="500" value="8">
+            </div>
+
+            <div class="setting">
+                <input type="button" value="Aplicar cambios" onclick="saveHyperparameters()">
+            </div>
+        </fieldset>
+    </form>
+
     <!-- SCRIPTS -->
     <script src="assets/js/index.js"></script>
     <script src="assets/js/vectorialSpace.js"></script>

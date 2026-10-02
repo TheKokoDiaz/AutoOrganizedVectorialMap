@@ -156,3 +156,63 @@ main{
     
     display: block;
 }
+
+.hyperparameters{
+    width: 100%;
+    color: white;
+    border-radius: var(--radius);
+    background-color: var(--primary);
+    
+    padding: 0.5rem 1rem 1rem 1rem;
+
+    fieldset{
+        border: none;
+
+        display: flex;
+        align-items: center;
+        justify-content: start;
+        flex-wrap: wrap;
+
+        gap: 0.5rem;
+
+        .setting{
+            width: calc(20% - 0.25rem);
+            
+            display: flex;
+            align-items: start;
+            justify-content: center;
+            flex-direction: column;
+
+            gap: 0.2rem;
+
+            label{
+                font-weight: bold;
+            }
+
+            input[type="number"], select{
+                width: 100%;
+                padding: 0.5rem;
+            }
+
+            input[type="button"]{
+                width: 100%;
+                padding: 0.5rem;
+                margin-top: 1rem;
+                
+                color: white;
+                font-weight: bold;
+
+                border: none;
+                border-radius: var(--radius);
+                background-color: var(--secondary);
+
+                cursor: pointer;
+                transition-duration: 200ms;
+            }
+            
+            input[type="button"]:active{
+                background-color: var(--background);
+            }
+        }
+    }
+}
