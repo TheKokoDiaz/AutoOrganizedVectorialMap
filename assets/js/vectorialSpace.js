@@ -235,9 +235,9 @@ for (var animal = 0; animal < SOM3D_ANIMALS; animal++) {
 // PASO 4: proyecta las posiciones XYZ al canvas 2D con una vista isométrica.
 var mapCanvas = document.getElementById('map');
 var mapContext = mapCanvas.getContext('2d');
-var depthScale = 0.18;
 var axisXScale = Math.SQRT1_2;
 var axisYScale = Math.SQRT1_2 / 2;
+var depthScale = Math.sqrt(axisXScale ** 2 + axisYScale ** 2);
 var mapHalfRange = (SOM3D_SIZE - 1) / 2;
 var mapPixelRatio = Math.min(window.devicePixelRatio || 1, 2);
 
